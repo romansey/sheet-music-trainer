@@ -1,0 +1,16 @@
+{
+    "maxparams": 6,
+    "indent": 4,
+    "camelcase": true,
+    "eqeqeq": true,
+    "forin": true,
+    "immed": true,
+    "latedef": true,
+    "noarg": true,
+    "noempty": true,
+    "nonew": true,
+    "esnext": true,
+    "globals": {
+        "require": false
+    }
+}

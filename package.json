@@ -1,0 +1,26 @@
+{
+  "name": "sheet-music-trainer",
+  "version": "0.1.0",
+  "description": "Practice reading sheet music with your MIDI controller",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp",
+    "dev": "gulp dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "https://github.com/Urlaubsgimpel/sheet-music-trainer.git",
+  "author": "Roman Tilgner",
+  "license": "MIT",
+  "dependencies": {
+    "vexflow": "^1.2.27"
+  },
+  "devDependencies": {
+    "babel-loader": "^5.0.0",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-jshint": "^1.10.0",
+    "gulp-minify-css": "^1.1.0",
+    "gulp-uglify": "^1.2.0",
+    "gulp-webpack": "^1.4.0"
+  }
+}
