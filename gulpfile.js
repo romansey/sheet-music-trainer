@@ -7,7 +7,8 @@ var gulp = require('gulp'),
     webpackConfig = require('./webpack.config');
 
 gulp.task('default', ['lint', 'html', 'css', 'js']);
-gulp.task('dev', ['default', 'watch']);
+gulp.task('debug', ['lint', 'html', 'css', 'jsdebug']);
+gulp.task('dev', ['debug', 'watch']);
 
 gulp.task('html', function () {
     gulp.src('src/**/*.html')
@@ -18,6 +19,12 @@ gulp.task('js', function() {
     gulp.src('src/js/main.js')
         .pipe(webpack(webpackConfig))
         .pipe(uglify())
+        .pipe(gulp.dest('./dist/js'));
+});
+
+gulp.task('jsdebug', function() {
+    gulp.src('src/js/main.js')
+        .pipe(webpack(webpackConfig))
         .pipe(gulp.dest('./dist/js'));
 });
 
