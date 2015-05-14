@@ -2,7 +2,7 @@ import NoteRenderer from './lib/NoteRenderer';
 import * as Utils from './lib/Utils';
 
 let messageTimeout;
-let currentMidiChannel = 0;
+let currentMidiChannel = -1;
 let currentMidiDevice;
 let noteRenderer;
 let nextNote;
@@ -37,7 +37,7 @@ function midiMessageReceived(event) {
         velocity = event.data[2];
     }
 
-    if ((currentMidiChannel === 0 || currentMidiChannel === channel) && command === 9 && velocity > 0) {
+    if ((currentMidiChannel === -1 || currentMidiChannel === channel) && command === 9 && velocity > 0) {
         let note = Utils.noteNumberToNote(noteNumber);
         console.log('Note pressed: ' + note);
         if (note === nextNote) {
