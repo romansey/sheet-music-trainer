@@ -4,23 +4,32 @@ export default class NoteRenderer {
 
     constructor(canvas) {
         this.canvas = canvas;
+        this.renderer = new vexflow.Flow.Renderer(this.canvas, vexflow.Flow.Renderer.Backends.CANVAS);
     }
 
     renderNote(keys) {
-        let renderer = new vexflow.Flow.Renderer(this.canvas, vexflow.Flow.Renderer.Backends.CANVAS);
+        let ctx = this.renderer.getContext();
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        let ctx = renderer.getContext();
-        let stave = new vexflow.Flow.Stave(10, 0, 500);
+        let stave = new vexflow.Flow.Stave(10, 0, 300);
         stave.addClef("treble")
             .addTimeSignature("4/4")
             .setContext(ctx).draw();
 
-        let notes = [
-            new vexflow.Flow.StaveNote({keys: keys, duration: "q", 'auto_stem': true}),
-            new vexflow.Flow.StaveNote({keys: keys, duration: "q", 'auto_stem': true}),
-            new vexflow.Flow.StaveNote({keys: keys, duration: "q", 'auto_stem': true}),
-            new vexflow.Flow.StaveNote({keys: keys, duration: "q", 'auto_stem': true})
-        ];
+        let note = new vexflow.Flow.StaveNote({
+            keys: keys, duration: "w", 'auto_stem': true
+        });
+
+        keys.forEach(function (key, index) {
+            switch (key.substr(1, 1)) {
+                case '#':
+                    note.addAccidental(index, new Vex.Flow.Accidental("#"));
+                    break;
+                case 'b':
+                    note.addAccidental(index, new Vex.Flow.Accidental("b"));
+                    break;
+            }
+        });
 
         let voice = new vexflow.Flow.Voice({
             'num_beats': 4,
@@ -28,7 +37,7 @@ export default class NoteRenderer {
             resolution: vexflow.Flow.RESOLUTION
         });
 
-        voice.addTickables(notes);
+        voice.addTickables([note]);
 
         let formatter = new vexflow.Flow.Formatter().joinVoices([voice]).format([voice], 500);
 

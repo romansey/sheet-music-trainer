@@ -1,0 +1,1 @@
+#message,#options{text-align:center}body,html{padding:0;margin:0;font-family:Helvetica,Arial,sans-serif;font-size:11pt}#options{padding:5px;background-color:#EFE;border-bottom:1px solid #000}#options select{margin:0 20px 0 5px}#content{width:350px;margin:auto}#message{display:none}#message.positive{display:block;color:#090}#message.negative{display:block;color:#900}
