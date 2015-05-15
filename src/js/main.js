@@ -1,9 +1,11 @@
 import NoteRenderer from './lib/NoteRenderer';
 import * as Utils from './lib/Utils';
 
+let intendedHashChange = false;
 let messageTimeout;
 let currentMidiChannel = -1;
 let currentMidiDevice;
+let currentClef;
 let noteRenderer;
 let nextNote;
 
@@ -22,10 +24,18 @@ function displayMessage(text, isGood) {
 }
 
 function renderRandomNote() {
-    let random = Math.floor(Math.random() * (85 - 60) + 60);
+    let random;
+    switch (currentClef) {
+        case 'bass':
+            random = Math.floor(Math.random() * (65 - 36) + 36);
+            break;
+        default:
+            random = Math.floor(Math.random() * (85 - 57) + 57);
+            break;
+    }
     nextNote = Utils.noteNumberToNote(random);
     console.log('Next note: ' + nextNote);
-    noteRenderer.renderNote([nextNote]);
+    noteRenderer.renderNote([nextNote], currentClef);
 }
 
 function midiMessageReceived(event) {
@@ -49,10 +59,31 @@ function midiMessageReceived(event) {
     }
 }
 
+function determineClef(selectClef) {
+    let clefSet = false;
+    if (window.location.href.indexOf('#') > -1) {
+        let clef = window.location.href.split('#')[1];
+        let option = document.querySelector('#clef option[value="' + clef + '"]');
+        if (option) {
+            selectClef.value = clef;
+            currentClef = clef;
+            clefSet = true;
+        }
+    }
+    if (!clefSet) {
+        let defaultValue = selectClef[0].value;
+        selectClef.value = defaultValue;
+        currentClef = defaultValue;
+    }
+}
+
 window.onload = function () {
     let canvas = document.getElementById('staff');
     let selectInput = document.getElementById('input');
     let selectChannel = document.getElementById('channel');
+    let selectClef = document.getElementById('clef');
+
+    determineClef(selectClef);
 
     noteRenderer = new NoteRenderer(canvas);
 
@@ -87,6 +118,22 @@ window.onload = function () {
 
     selectChannel.addEventListener('change', function () {
         currentMidiChannel = parseInt(this.value);
+    });
+
+    selectClef.addEventListener('change', function () {
+        currentClef = this.value;
+        intendedHashChange = true;
+        window.location.hash = '#' + currentClef;
+        renderRandomNote();
+    });
+
+    window.addEventListener('hashchange', function () {
+        if (intendedHashChange) {
+            intendedHashChange = false;
+        } else {
+            determineClef(selectClef);
+            renderRandomNote();
+        }
     });
 
     renderRandomNote();

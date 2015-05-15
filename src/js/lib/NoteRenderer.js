@@ -7,17 +7,20 @@ export default class NoteRenderer {
         this.renderer = new vexflow.Flow.Renderer(this.canvas, vexflow.Flow.Renderer.Backends.CANVAS);
     }
 
-    renderNote(keys) {
+    renderNote(keys, clef) {
         let ctx = this.renderer.getContext();
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         let stave = new vexflow.Flow.Stave(10, 0, 300);
-        stave.addClef("treble")
-            .addTimeSignature("4/4")
+        stave.addClef(clef)
+            .addTimeSignature("1/4")
             .setContext(ctx).draw();
 
         let note = new vexflow.Flow.StaveNote({
-            keys: keys, duration: "w", 'auto_stem': true
+            keys: keys,
+            duration: "q",
+            'auto_stem': true,
+            clef: clef
         });
 
         keys.forEach(function (key, index) {
@@ -32,7 +35,7 @@ export default class NoteRenderer {
         });
 
         let voice = new vexflow.Flow.Voice({
-            'num_beats': 4,
+            'num_beats': 1,
             'beat_value': 4,
             resolution: vexflow.Flow.RESOLUTION
         });
